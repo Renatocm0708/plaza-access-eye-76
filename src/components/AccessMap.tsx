@@ -18,12 +18,12 @@ const AccessMap = () => {
     { id: "b1", name: "Barrera 1", type: "barrier", online: true, open: false },
     { id: "b2", name: "Barrera 2", type: "barrier", online: true, open: true },
     
-    // Pedestrian doors (top right - first column)
+    // Where Puerta 1 is located (x1) - first column
     { id: "p1", name: "Puerta 1", type: "door", online: true, open: false },
     { id: "p2", name: "Puerta 2", type: "door", online: true, open: false },
     { id: "p3", name: "Puerta 3", type: "door", online: false, open: false },
     
-    // Pedestrian doors (top right - second column)
+    // Where Puerta 3 is located (x2) - second column
     { id: "p4", name: "Puerta 4", type: "door", online: true, open: true },
     { id: "p5", name: "Puerta 5", type: "door", online: true, open: false },
     { id: "p6", name: "Puerta 6", type: "door", online: true, open: false },
@@ -105,9 +105,9 @@ const AccessMap = () => {
             Acceso Vehicular
           </div>
           
-          {/* Right label */}
+          {/* Right label - Changed to Acceso Vehicular */}
           <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-300 px-4 py-0.5 rounded text-sm font-medium transform rotate-90">
-            Acceso Peatonal
+            Acceso Vehicular
           </div>
           
           {/* Top left - Barriers */}
@@ -128,43 +128,40 @@ const AccessMap = () => {
               ))}
           </div>
           
-          {/* Top right - Doors (2 columns) */}
-          <div className="absolute top-20 right-24 grid grid-cols-2 gap-x-8 gap-y-6">
-            {/* First column */}
-            <div className="flex flex-col space-y-6">
-              {accessPoints
-                .filter(p => ["p1", "p2", "p3"].includes(p.id))
-                .map(point => (
-                  <button 
-                    key={point.id} 
-                    onClick={() => toggleAccessPoint(point.id, "open")}
-                    className="flex flex-col items-center group"
-                  >
-                    <AccessPointIcon point={point} />
-                    <span className="mt-1 text-xs font-medium opacity-80 group-hover:opacity-100">
-                      {point.name}
-                    </span>
-                  </button>
-                ))}
-            </div>
-            
-            {/* Second column */}
-            <div className="flex flex-col space-y-6">
-              {accessPoints
-                .filter(p => ["p4", "p5", "p6"].includes(p.id))
-                .map(point => (
-                  <button 
-                    key={point.id} 
-                    onClick={() => toggleAccessPoint(point.id, "open")}
-                    className="flex flex-col items-center group"
-                  >
-                    <AccessPointIcon point={point} />
-                    <span className="mt-1 text-xs font-medium opacity-80 group-hover:opacity-100">
-                      {point.name}
-                    </span>
-                  </button>
-                ))}
-            </div>
+          {/* X1 position - Three doors */}
+          <div className="absolute top-20 right-24 grid grid-cols-1 gap-y-6">
+            {accessPoints
+              .filter(p => ["p1", "p2", "p3"].includes(p.id))
+              .map(point => (
+                <button 
+                  key={point.id} 
+                  onClick={() => toggleAccessPoint(point.id, "open")}
+                  className="flex flex-col items-center group"
+                >
+                  <AccessPointIcon point={point} />
+                  <span className="mt-1 text-xs font-medium opacity-80 group-hover:opacity-100">
+                    {point.name}
+                  </span>
+                </button>
+              ))}
+          </div>
+          
+          {/* X2 position - Three doors */}
+          <div className="absolute top-20 right-28 ml-20 grid grid-cols-1 gap-y-6">
+            {accessPoints
+              .filter(p => ["p4", "p5", "p6"].includes(p.id))
+              .map(point => (
+                <button 
+                  key={point.id} 
+                  onClick={() => toggleAccessPoint(point.id, "open")}
+                  className="flex flex-col items-center group"
+                >
+                  <AccessPointIcon point={point} />
+                  <span className="mt-1 text-xs font-medium opacity-80 group-hover:opacity-100">
+                    {point.name}
+                  </span>
+                </button>
+              ))}
           </div>
           
           {/* Bottom right - Doors (more spaced) */}
