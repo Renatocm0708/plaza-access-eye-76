@@ -28,10 +28,7 @@ const AccessMap = () => {
     { id: "p5", name: "Puerta 5", type: "door", online: true, open: false },
     { id: "p6", name: "Puerta 6", type: "door", online: true, open: false },
     
-    // Pedestrian doors (bottom right - spaced)
-    { id: "p7", name: "Puerta 7", type: "door", online: true, open: false },
-    { id: "p8", name: "Puerta 8", type: "door", online: false, open: false },
-    { id: "p9", name: "Puerta 9", type: "door", online: true, open: true },
+    
   ]);
 
   // Toggle access point status (for demonstration purposes)
