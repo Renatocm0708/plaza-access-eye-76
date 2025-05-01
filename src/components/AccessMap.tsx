@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DoorClosed, DoorOpen, Gate, CircleCheck, CircleX, CircleSlash } from "lucide-react";
+import { DoorClosed, DoorOpen, CircleCheck, CircleX, CircleSlash } from "lucide-react";
 
 interface AccessPoint {
   id: string;
@@ -53,14 +53,15 @@ const AccessMap = () => {
     const statusColor = point.online ? "text-green-500" : "text-red-500";
     
     if (point.type === "barrier") {
+      // Use DoorOpen/DoorClosed for barriers too, but with a different style
       return point.open ? (
         <div className="relative">
-          <Gate className={`${size} text-blue-500`} />
+          <DoorOpen className={`${size} text-blue-500`} />
           <CircleCheck className={`absolute -bottom-2 -right-2 h-5 w-5 ${statusColor}`} />
         </div>
       ) : (
         <div className="relative">
-          <Gate className={`${size} text-slate-700`} />
+          <DoorClosed className={`${size} text-slate-700`} />
           <CircleSlash className={`absolute -bottom-2 -right-2 h-5 w-5 ${statusColor}`} />
         </div>
       );
