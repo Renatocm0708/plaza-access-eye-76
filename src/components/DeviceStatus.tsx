@@ -72,10 +72,14 @@ interface Device {
 
 const devices: Device[] = [
   { id: "1", name: "Torniquete Principal 1", type: "peatonal", isOnline: true, lastPing: "1m ago", status: "closed", location: "Entrada Norte" },
-  { id: "2", name: "Torniquete Principal 2", type: "peatonal", isOnline: true, lastPing: "1m ago", status: "closed", location: "Entrada Norte" },
-  { id: "3", name: "Barrera Vehicular 1", type: "vehicular", isOnline: true, lastPing: "1m ago", status: "closed", location: "Entrada Este" },
-  { id: "4", name: "Barrera Vehicular 2", type: "vehicular", isOnline: false, lastPing: "15m ago", status: "closed", location: "Entrada Oeste" },
-  { id: "5", name: "Torniquete Lateral", type: "peatonal", isOnline: true, lastPing: "1m ago", status: "open", location: "Lateral Sur" },
+  { id: "2", name: "Barrera Vehicular 1", type: "peatonal", isOnline: true, lastPing: "1m ago", status: "closed", location: "Entrada Norte" },
+  { id: "3", name: "Barrera Vehicular 2", type: "vehicular", isOnline: true, lastPing: "1m ago", status: "closed", location: "Entrada Este" },
+  { id: "4", name: "Barrera Vehicular 3", type: "vehicular", isOnline: false, lastPing: "15m ago", status: "closed", location: "Entrada Oeste" },
+  { id: "5", name: "Barrera Vehicular 4", type: "vehicular", isOnline: false, lastPing: "15m ago", status: "closed", location: "Entrada Oeste" },
+  { id: "6", name: "Barrera Vehicular 5", type: "vehicular", isOnline: false, lastPing: "15m ago", status: "closed", location: "Entrada Oeste" },
+  { id: "7", name: "Barrera Vehicular 6", type: "vehicular", isOnline: false, lastPing: "15m ago", status: "closed", location: "Entrada Oeste" },
+  { id: "8", name: "Barrera Vehicular 3", type: "vehicular", isOnline: false, lastPing: "15m ago", status: "closed", location: "Entrada Oeste" },
+  { id: "9", name: "Barrera Vehicular 3", type: "vehicular", isOnline: false, lastPing: "15m ago", status: "closed", location: "Entrada Oeste" },
 ];
 
 const DeviceStatus = () => {
