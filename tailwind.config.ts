@@ -61,6 +61,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				status: {
+					online: '#10b981', // green
+					offline: '#f43f5e', // red
+					warning: '#f97316', // orange
+					open: '#10b981', // green
+					closed: '#6b7280' // gray
 				}
 			},
 			borderRadius: {
