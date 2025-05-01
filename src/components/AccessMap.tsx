@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DoorClosed, DoorOpen, CircleCheck, CircleX, CircleSlash } from "lucide-react";
@@ -129,7 +128,7 @@ const AccessMap = () => {
           </div>
           
           {/* X1 position - Three doors */}
-          <div className="absolute top-20 right-24 grid grid-cols-1 gap-y-6">
+          <div className="absolute top-20 right-24 grid grid-cols-1 gap-y-10">
             {accessPoints
               .filter(p => ["p1", "p2", "p3"].includes(p.id))
               .map(point => (
@@ -147,7 +146,7 @@ const AccessMap = () => {
           </div>
           
           {/* X2 position - Three doors */}
-          <div className="absolute top-20 right-28 ml-20 grid grid-cols-1 gap-y-6">
+          <div className="absolute top-20 right-28 ml-20 grid grid-cols-1 gap-y-10">
             {accessPoints
               .filter(p => ["p4", "p5", "p6"].includes(p.id))
               .map(point => (
