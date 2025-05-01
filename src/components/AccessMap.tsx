@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DoorClosed, DoorOpen, CircleCheck, CircleX, CircleSlash } from "lucide-react";
@@ -127,8 +128,8 @@ const AccessMap = () => {
               ))}
           </div>
           
-          {/* X1 position - Three doors */}
-          <div className="absolute top-20 right-24 grid grid-cols-1 gap-y-10">
+          {/* Top right - Three doors */}
+          <div className="absolute top-24 right-24 flex space-x-8">
             {accessPoints
               .filter(p => ["p1", "p2", "p3"].includes(p.id))
               .map(point => (
@@ -138,15 +139,15 @@ const AccessMap = () => {
                   className="flex flex-col items-center group"
                 >
                   <AccessPointIcon point={point} />
-                  <span className="mt-1 text-xs font-medium opacity-80 group-hover:opacity-100">
+                  <span className="mt-2 text-xs font-medium opacity-80 group-hover:opacity-100">
                     {point.name}
                   </span>
                 </button>
               ))}
           </div>
           
-          {/* X2 position - Three doors */}
-          <div className="absolute top-20 right-28 ml-20 grid grid-cols-1 gap-y-10">
+          {/* Bottom right - Three doors */}
+          <div className="absolute bottom-24 right-24 flex space-x-8">
             {accessPoints
               .filter(p => ["p4", "p5", "p6"].includes(p.id))
               .map(point => (
@@ -156,15 +157,15 @@ const AccessMap = () => {
                   className="flex flex-col items-center group"
                 >
                   <AccessPointIcon point={point} />
-                  <span className="mt-1 text-xs font-medium opacity-80 group-hover:opacity-100">
+                  <span className="mt-2 text-xs font-medium opacity-80 group-hover:opacity-100">
                     {point.name}
                   </span>
                 </button>
               ))}
           </div>
           
-          {/* Bottom right - Doors (more spaced) */}
-          <div className="absolute bottom-20 right-28 flex flex-col space-y-12">
+          {/* Bottom left - Remaining doors */}
+          <div className="absolute bottom-24 left-24 flex space-x-8">
             {accessPoints
               .filter(p => ["p7", "p8", "p9"].includes(p.id))
               .map(point => (
@@ -174,7 +175,7 @@ const AccessMap = () => {
                   className="flex flex-col items-center group"
                 >
                   <AccessPointIcon point={point} />
-                  <span className="mt-1 text-xs font-medium opacity-80 group-hover:opacity-100">
+                  <span className="mt-2 text-xs font-medium opacity-80 group-hover:opacity-100">
                     {point.name}
                   </span>
                 </button>
