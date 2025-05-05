@@ -43,7 +43,7 @@ const Dashboard = () => {
             />
             <Moon className="h-4 w-4 text-slate-600 dark:text-slate-400" />
           </div>
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2">
             <button
               className={`px-4 py-1 rounded-md text-sm font-medium ${
                 timeRange === "day" ? "bg-lime-500 dark:bg-lime-600 text-white" : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
@@ -75,7 +75,7 @@ const Dashboard = () => {
       {/* Summary Stats Section */}
       <SummaryStats timeRange={timeRange} />
       
-      {/* Key Indicators & Access Map */}
+      {/* Key Indicators & Access Alerts & Device Status - Improved layout for mobile */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
         <div className="lg:col-span-2">
           <KeyIndicators timeRange={timeRange} />
@@ -88,12 +88,12 @@ const Dashboard = () => {
         </div>
       </div>
       
-      {/* Visit Analytics - New Section */}
+      {/* Visit Analytics - Improved for mobile */}
       <div className="mt-6">
         <VisitAnalytics />
       </div>
       
-      {/* Access Map */}
+      {/* Access Map - Improved for mobile */}
       <div className="mt-6">
         <AccessMap />
       </div>

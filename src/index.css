@@ -43,6 +43,16 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 79 70% 46%;
+    
+    /* Chart colors for light mode */
+    --chart-pedestrian: 79 70% 46%;
+    --chart-vehicular: 240 5.9% 25%;
+    --chart-total: 210 40% 56.1%;
+    
+    /* Lane colors for light mode */
+    --lane-owners: 79 70% 46%;
+    --lane-visitors-qr: 79 65% 35%;
+    --lane-visitors: 79 60% 25%;
   }
 
   .dark {
@@ -82,6 +92,16 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 79 70% 46%;
+    
+    /* Chart colors for dark mode - improved visibility */
+    --chart-pedestrian: 79 80% 56%;
+    --chart-vehicular: 220 15% 70%;
+    --chart-total: 210 50% 66.1%;
+    
+    /* Lane colors for dark mode - improved visibility */
+    --lane-owners: 79 80% 56%;
+    --lane-visitors-qr: 79 70% 46%;
+    --lane-visitors: 79 60% 36%;
   }
 }
 
@@ -92,5 +112,27 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Tooltip styles for both light and dark mode */
+  .recharts-tooltip-wrapper .recharts-default-tooltip {
+    @apply bg-card text-card-foreground border-border !important;
+  }
+}
+
+/* Custom tooltip style adjustments */
+.dark .recharts-tooltip-item-name,
+.dark .recharts-tooltip-item-value {
+  @apply text-foreground !important;
+}
+
+/* Mobile responsiveness adjustments */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    @apply flex flex-col gap-4;
+  }
+
+  .dashboard-card {
+    @apply w-full;
   }
 }
