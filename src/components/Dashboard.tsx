@@ -6,14 +6,24 @@ import AccessMap from "./AccessMap";
 import AccessAlerts from "./AccessAlerts";
 import DeviceStatus from "./DeviceStatus";
 import VisitAnalytics from "./VisitAnalytics";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, FileExport } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
   const [timeRange, setTimeRange] = useState("day");
   const [darkMode, setDarkMode] = useState(false);
   const { user } = useAuth();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: new Date(new Date().setDate(new Date().getDate() - 7)),
+    to: new Date(),
+  });
   
   useEffect(() => {
     if (darkMode) {
@@ -22,6 +32,36 @@ const Dashboard = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [darkMode]);
+  
+  const handleExportData = () => {
+    if (!dateRange?.from || !dateRange?.to) {
+      alert("Por favor seleccione un rango de fechas para exportar");
+      return;
+    }
+    
+    // Generar datos de ejemplo para exportar
+    const data = [
+      ["Fecha", "Tipo", "Nombre", "Dirección", "Tipo Acceso", "Método", "Entrada/Salida"],
+      [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Visitante", "Juan Pérez", "Bloque A, Apto 101", "Vehicular", "QR", "Entrada"],
+      [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Residente", "María Gómez", "Bloque B, Apto 205", "Peatonal", "Facial", "Entrada"],
+      [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Visitante", "Carlos López", "Bloque A, Apto 101", "Vehicular", "Personal", "Salida"],
+      [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Residente", "Ana Rodríguez", "Bloque C, Apto 310", "Peatonal", "Tag", "Salida"],
+    ];
+    
+    // Convertir a CSV
+    const csv = data.map(row => row.join(",")).join("\n");
+    
+    // Crear blob y descargar
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `registros_acceso_${format(dateRange.from, "yyyy-MM-dd")}_${format(dateRange.to, "yyyy-MM-dd")}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   
   return (
     <div className="container mx-auto p-4">
@@ -35,13 +75,46 @@ const Dashboard = () => {
           <h2 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100">Dashboard de Control de Acceso</h2>
         </div>
         <div className="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-4">
-          <div className="flex items-center space-x-2">
-            <Sun className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-            <Switch 
-              checked={darkMode}
-              onCheckedChange={setDarkMode}
-            />
-            <Moon className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+          <div className="flex flex-row items-center space-x-4">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <FileExport className="h-4 w-4" />
+                  <span className="hidden md:inline">Exportar Datos</span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-3" align="end">
+                <div className="space-y-3">
+                  <h3 className="font-medium">Seleccione rango de fechas</h3>
+                  <Calendar
+                    initialFocus
+                    mode="range"
+                    defaultMonth={dateRange?.from}
+                    selected={dateRange}
+                    onSelect={setDateRange}
+                    numberOfMonths={2}
+                    className="p-3 pointer-events-auto"
+                  />
+                  <div className="pt-2 flex justify-end">
+                    <Button 
+                      onClick={handleExportData}
+                      className="bg-lime-500 hover:bg-lime-600"
+                    >
+                      Exportar CSV
+                    </Button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+            
+            <div className="flex items-center space-x-2">
+              <Sun className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+              <Switch 
+                checked={darkMode}
+                onCheckedChange={setDarkMode}
+              />
+              <Moon className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+            </div>
           </div>
           <div className="flex flex-wrap gap-2">
             <button
