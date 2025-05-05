@@ -5,6 +5,7 @@ import KeyIndicators from "./KeyIndicators";
 import AccessMap from "./AccessMap";
 import AccessAlerts from "./AccessAlerts";
 import DeviceStatus from "./DeviceStatus";
+import VisitAnalytics from "./VisitAnalytics";
 
 const Dashboard = () => {
   const [timeRange, setTimeRange] = useState("day");
@@ -55,6 +56,11 @@ const Dashboard = () => {
             <DeviceStatus />
           </div>
         </div>
+      </div>
+      
+      {/* Visit Analytics - New Section */}
+      <div className="mt-6">
+        <VisitAnalytics />
       </div>
       
       {/* Access Map */}
