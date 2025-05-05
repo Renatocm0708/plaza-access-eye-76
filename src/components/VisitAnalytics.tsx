@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
@@ -26,6 +26,7 @@ import { CalendarDays, Users, Car } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Data generation helper functions
 const generateHourlyData = () => {
@@ -49,9 +50,9 @@ const generateDailyData = (days = 7) => {
 
 const generateLaneData = () => {
   return [
-    { name: "Carril Propietarios", value: 540, color: "#b5cb22" },
-    { name: "Carril Visitantes QR", value: 320, color: "#8ba313" },
-    { name: "Carril Visitantes", value: 210, color: "#626e0e" },
+    { name: "Carril Propietarios", value: 540, color: "#b5cb22", id: "propietarios" },
+    { name: "Carril Visitantes QR", value: 320, color: "#8ba313", id: "visitantesQR" },
+    { name: "Carril Visitantes", value: 210, color: "#626e0e", id: "visitantes" },
   ];
 };
 
@@ -91,7 +92,7 @@ const DateRangePicker = ({
           <Button
             variant="outline"
             className={cn(
-              "justify-start text-left font-normal w-[280px]",
+              "justify-start text-left font-normal w-full md:w-[280px]",
               !date && "text-muted-foreground"
             )}
           >
@@ -133,10 +134,20 @@ const VisitAnalytics = () => {
   const [analysisView, setAnalysisView] = useState("overview");
   const [laneFilter, setLaneFilter] = useState("todas");
   const [searchTerm, setSearchTerm] = useState("");
+  const isMobile = useIsMobile();
 
   const hourlyData = generateHourlyData();
   const dailyData = generateDailyData();
-  const laneData = generateLaneData();
+  const allLaneData = generateLaneData();
+  
+  // Filter lane data based on selected filter
+  const laneData = useMemo(() => {
+    if (laneFilter === "todas") {
+      return allLaneData;
+    }
+    return allLaneData.filter(item => item.id === laneFilter);
+  }, [laneFilter, allLaneData]);
+
   const frequentVisitors = generateFrequentVisitors();
   const addressVisits = generateAddressVisits();
 
@@ -152,7 +163,7 @@ const VisitAnalytics = () => {
     <Card className="shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Users className="h-5 w-5" />
+          <Users className="h-5 w-5 text-primary dark:text-primary" />
           Análisis de Visitas
         </CardTitle>
       </CardHeader>
@@ -161,7 +172,7 @@ const VisitAnalytics = () => {
         
         <div className="space-y-4">
           <Tabs value={analysisView} onValueChange={setAnalysisView} className="w-full">
-            <TabsList className="grid grid-cols-4 mb-4">
+            <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-4">
               <TabsTrigger value="overview">Resumen</TabsTrigger>
               <TabsTrigger value="hourly">Por Hora</TabsTrigger>
               <TabsTrigger value="lanes">Por Carril</TabsTrigger>
@@ -179,10 +190,17 @@ const VisitAnalytics = () => {
                     <div className="h-[300px]">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={dailyData}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="day" />
-                          <YAxis />
-                          <Tooltip />
+                          <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 120, 120, 0.2)" />
+                          <XAxis dataKey="day" stroke="currentColor" />
+                          <YAxis stroke="currentColor" />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: 'var(--card)', 
+                              borderColor: 'var(--border)',
+                              color: 'var(--foreground)'
+                            }} 
+                            labelStyle={{ color: 'var(--foreground)' }}
+                          />
                           <Legend />
                           <Line 
                             type="monotone" 
@@ -229,7 +247,13 @@ const VisitAnalytics = () => {
                             <Cell fill="#3b3f48" />
                             <Cell fill="#b5cb22" />
                           </Pie>
-                          <Tooltip />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: 'var(--card)', 
+                              borderColor: 'var(--border)',
+                              color: 'var(--foreground)'
+                            }}
+                          />
                         </PieChart>
                       </ResponsiveContainer>
                     </div>
@@ -238,36 +262,36 @@ const VisitAnalytics = () => {
               </div>
               
               {/* Summary Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Card>
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <h3 className="text-3xl font-bold">{dailyData.reduce((acc, day) => acc + day.total, 0)}</h3>
-                      <p className="text-sm text-muted-foreground">Total Visitas</p>
+                      <h3 className="text-2xl md:text-3xl font-bold">{dailyData.reduce((acc, day) => acc + day.total, 0)}</h3>
+                      <p className="text-xs md:text-sm text-muted-foreground">Total Visitas</p>
                     </div>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <h3 className="text-3xl font-bold">{Math.round(dailyData.reduce((acc, day) => acc + day.vehicular, 0) / dailyData.reduce((acc, day) => acc + day.total, 0) * 100)}%</h3>
-                      <p className="text-sm text-muted-foreground">Con Vehículo</p>
+                      <h3 className="text-2xl md:text-3xl font-bold">{Math.round(dailyData.reduce((acc, day) => acc + day.vehicular, 0) / dailyData.reduce((acc, day) => acc + day.total, 0) * 100)}%</h3>
+                      <p className="text-xs md:text-sm text-muted-foreground">Con Vehículo</p>
                     </div>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <h3 className="text-3xl font-bold">08:00</h3>
-                      <p className="text-sm text-muted-foreground">Hora Pico</p>
+                      <h3 className="text-2xl md:text-3xl font-bold">08:00</h3>
+                      <p className="text-xs md:text-sm text-muted-foreground">Hora Pico</p>
                     </div>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <h3 className="text-3xl font-bold">45%</h3>
-                      <p className="text-sm text-muted-foreground">Visitas Recurrentes</p>
+                      <h3 className="text-2xl md:text-3xl font-bold">45%</h3>
+                      <p className="text-xs md:text-sm text-muted-foreground">Visitas Recurrentes</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -283,10 +307,16 @@ const VisitAnalytics = () => {
                   <div className="h-[400px]">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={hourlyData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="hour" />
-                        <YAxis />
-                        <Tooltip />
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 120, 120, 0.2)" />
+                        <XAxis dataKey="hour" stroke="currentColor" />
+                        <YAxis stroke="currentColor" />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'var(--card)', 
+                            borderColor: 'var(--border)',
+                            color: 'var(--foreground)'
+                          }}
+                        />
                         <Legend />
                         <Bar dataKey="pedestrian" name="Peatonal" fill="#b5cb22" />
                         <Bar dataKey="vehicular" name="Vehicular" fill="#3b3f48" />
@@ -298,37 +328,35 @@ const VisitAnalytics = () => {
             </TabsContent>
             
             <TabsContent value="lanes">
-              <div className="flex mb-4">
-                <div className="flex space-x-2">
-                  <Button
-                    variant={laneFilter === "todas" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setLaneFilter("todas")}
-                  >
-                    Todos
-                  </Button>
-                  <Button
-                    variant={laneFilter === "propietarios" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setLaneFilter("propietarios")}
-                  >
-                    Propietarios
-                  </Button>
-                  <Button
-                    variant={laneFilter === "visitantesQR" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setLaneFilter("visitantesQR")}
-                  >
-                    Visitantes QR
-                  </Button>
-                  <Button
-                    variant={laneFilter === "visitantes" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setLaneFilter("visitantes")}
-                  >
-                    Visitantes
-                  </Button>
-                </div>
+              <div className="flex mb-4 flex-wrap gap-2">
+                <Button
+                  variant={laneFilter === "todas" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setLaneFilter("todas")}
+                >
+                  Todos
+                </Button>
+                <Button
+                  variant={laneFilter === "propietarios" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setLaneFilter("propietarios")}
+                >
+                  Propietarios
+                </Button>
+                <Button
+                  variant={laneFilter === "visitantesQR" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setLaneFilter("visitantesQR")}
+                >
+                  Visitantes QR
+                </Button>
+                <Button
+                  variant={laneFilter === "visitantes" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setLaneFilter("visitantes")}
+                >
+                  Visitantes
+                </Button>
               </div>
               
               <Card>
@@ -343,11 +371,11 @@ const VisitAnalytics = () => {
                           data={laneData}
                           cx="50%"
                           cy="50%"
-                          labelLine={true}
-                          outerRadius={150}
+                          labelLine={!isMobile}
+                          outerRadius={isMobile ? 100 : 150}
                           fill="#8884d8"
                           dataKey="value"
-                          label={({ name, value, percent }) => 
+                          label={isMobile ? undefined : ({ name, value, percent }) => 
                             `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
                           }
                         >
@@ -355,7 +383,13 @@ const VisitAnalytics = () => {
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'var(--card)', 
+                            borderColor: 'var(--border)',
+                            color: 'var(--foreground)'
+                          }}
+                        />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
@@ -380,12 +414,12 @@ const VisitAnalytics = () => {
                   
                   <TabsContent value="visitors">
                     <Card>
-                      <CardContent className="p-0">
+                      <CardContent className="p-0 overflow-auto">
                         <Table>
                           <TableHeader>
                             <TableRow>
                               <TableHead>Visitante</TableHead>
-                              <TableHead>Tipo</TableHead>
+                              <TableHead className="hidden md:table-cell">Tipo</TableHead>
                               <TableHead className="text-right">Visitas</TableHead>
                               <TableHead className="text-right">Última Visita</TableHead>
                             </TableRow>
@@ -393,8 +427,18 @@ const VisitAnalytics = () => {
                           <TableBody>
                             {filteredVisitors.map((visitor) => (
                               <TableRow key={visitor.id}>
-                                <TableCell className="font-medium">{visitor.name}</TableCell>
-                                <TableCell>
+                                <TableCell className="font-medium">
+                                  <div className="flex items-center">
+                                    <span className="md:hidden mr-2">
+                                      {visitor.type === "Vehículo" ? 
+                                        <Car className="h-4 w-4 text-gray-700 dark:text-gray-300" /> : 
+                                        <Users className="h-4 w-4 text-lime-500 dark:text-lime-400" />
+                                      }
+                                    </span>
+                                    {visitor.name}
+                                  </div>
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell">
                                   <div className="flex items-center">
                                     {visitor.type === "Vehículo" ? 
                                       <Car className="h-4 w-4 mr-1 text-gray-700 dark:text-gray-300" /> : 
@@ -415,14 +459,14 @@ const VisitAnalytics = () => {
                   
                   <TabsContent value="addresses">
                     <Card>
-                      <CardContent className="p-0">
+                      <CardContent className="p-0 overflow-auto">
                         <Table>
                           <TableHeader>
                             <TableRow>
                               <TableHead>Dirección</TableHead>
                               <TableHead className="text-right">Residentes</TableHead>
                               <TableHead className="text-right">Visitas</TableHead>
-                              <TableHead className="text-right">Última Visita</TableHead>
+                              <TableHead className="text-right hidden md:table-cell">Última Visita</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -431,7 +475,7 @@ const VisitAnalytics = () => {
                                 <TableCell className="font-medium">{address.address}</TableCell>
                                 <TableCell className="text-right">{address.residents}</TableCell>
                                 <TableCell className="text-right">{address.visits}</TableCell>
-                                <TableCell className="text-right">{address.lastVisit}</TableCell>
+                                <TableCell className="text-right hidden md:table-cell">{address.lastVisit}</TableCell>
                               </TableRow>
                             ))}
                           </TableBody>

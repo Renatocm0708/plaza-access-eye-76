@@ -8,10 +8,12 @@ import DeviceStatus from "./DeviceStatus";
 import VisitAnalytics from "./VisitAnalytics";
 import { Sun, Moon } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { useAuth } from "@/context/AuthContext";
 
 const Dashboard = () => {
   const [timeRange, setTimeRange] = useState("day");
   const [darkMode, setDarkMode] = useState(false);
+  const { user } = useAuth();
   
   useEffect(() => {
     if (darkMode) {
@@ -23,16 +25,16 @@ const Dashboard = () => {
   
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
         <div className="flex items-center space-x-4">
           <img 
             src="/lovable-uploads/0ccdcd89-fe7a-4b2a-9256-05bafa7f6d27.png" 
             alt="SafeLand Logo" 
             className="h-10"
           />
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Dashboard de Control de Acceso</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100">Dashboard de Control de Acceso</h2>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-4">
           <div className="flex items-center space-x-2">
             <Sun className="h-4 w-4 text-slate-600 dark:text-slate-400" />
             <Switch 
