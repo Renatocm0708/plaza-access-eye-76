@@ -4,10 +4,10 @@ const LaneLabels = () => {
     <>
       {/* Left side lane labels */}
       <div className="absolute left-14 top-1/2 -translate-y-1/2 flex flex-col items-center space-y-4">
-        <div className="absolute left-[50px] top-1/3 bg-slate-300 px-3 py-1 rounded text-xs font-medium w-20 text-center">
+        <div className="absolute left-[70px] top-1/3 bg-slate-300 px-3 py-1 rounded text-xs font-medium w-20 text-center">
           Propietario
         </div>
-        <div className="absolute left-[110px] top-1/3 bg-slate-300 px-3 py-1 rounded text-xs font-medium w-20 text-center">
+        <div className="absolute left-[190px] top-1/3 bg-slate-300 px-3 py-1 rounded text-xs font-medium w-20 text-center">
           Visita
         </div>
       </div>
