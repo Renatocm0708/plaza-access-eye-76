@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+
+import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
@@ -49,10 +50,6 @@ const generateDailyData = (days = 7) => {
 
 const generateLaneData = () => {
   return [
-    /*{ name: "Carril Propietarios", value: 540, color: "#b5cb22", id: "propietarios" },
-    { name: "Carril Visitantes QR", value: 320, color: "#8ba313", id: "visitantesQR" },
-    { name: "Carril Visitantes", value: 210, color: "#626e0e", id: "visitantes" },*/
-
     { 
       name: "Carril Propietarios", 
       value: 540, 
@@ -154,10 +151,6 @@ const VisitAnalytics = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const isMobile = useIsMobile();
 
-  /*const hourlyData = generateHourlyData();
-  const dailyData = generateDailyData();
-  const allLaneData = generateLaneData();*/
-
   const hourlyData = useMemo(() => generateHourlyData(), []);
   const dailyData = useMemo(() => generateDailyData(), []);
   const allLaneData = useMemo(() => generateLaneData(), []);
@@ -170,16 +163,6 @@ const VisitAnalytics = () => {
     return allLaneData.filter(item => item.id === laneFilter);
   }, [laneFilter, allLaneData]);
 
- /* const frequentVisitors = generateFrequentVisitors();
-  const addressVisits = generateAddressVisits();
-
-  const filteredVisitors = frequentVisitors.filter(visitor => 
-    visitor.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const filteredAddresses = addressVisits.filter(address => 
-    address.address.toLowerCase().includes(searchTerm.toLowerCase())
-  );*/
   const frequentVisitors = useMemo(() => generateFrequentVisitors(), []);
   const addressVisits = useMemo(() => generateAddressVisits(), []);
 
@@ -282,14 +265,10 @@ const VisitAnalytics = () => {
                             ]}
                             cx="50%"
                             cy="50%"
-                           /* labelLine={false}
-                            outerRadius={100}*/
                             labelLine={!isMobile}
                             outerRadius={isMobile ? 80 : 100}
                             fill="#8884d8"
                             dataKey="value"
-                           /* label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}*/
-
                             label={isMobile ? undefined : ({ name, percent }) => 
                               `${name}: ${(percent * 100).toFixed(0)}%`
                             }
@@ -432,7 +411,7 @@ const VisitAnalytics = () => {
                             }
                           >
                             {laneData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.colorVar} />
+                              <Cell key={`cell-${index}`} fill={entry.color} />
                             ))}
                           </Pie>
                           <Tooltip 
@@ -466,7 +445,7 @@ const VisitAnalytics = () => {
                           <Bar 
                             dataKey="visits" 
                             name="Visitas" 
-                            fill={laneData.length > 0 ? laneData[0].colorVar : "var(--chart-pedestrian)"} 
+                            fill={laneData.length > 0 ? laneData[0].color : "#b5cb22"} 
                           />
                         </BarChart>
                       </ResponsiveContainer>
