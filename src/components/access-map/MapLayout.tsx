@@ -3,12 +3,14 @@ import MapLabels from "./MapLabels";
 import MapLegend from "./MapLegend";
 import AccessPointsGroup from "./AccessPointsGroup";
 import { useAccessPoints } from "./useAccessPoints";
+import VerticalSeparators from "./VerticalSeparators";
+import LaneLabels from "./LaneLabels";
 
 const MapLayout = () => {
   const { getPointsByIds, toggleAccessPoint } = useAccessPoints();
   
   // Group access points by position
-  const barrierPoints = getPointsByIds(["b1", "b2"]);
+  const leftBarrierPoints = getPointsByIds(["b1", "b2"]);
   const topRightPoints = getPointsByIds(["p1", "p2", "p3"]);
   const bottomRightPoints = getPointsByIds(["p4", "p5", "p6"]);
   
@@ -18,11 +20,13 @@ const MapLayout = () => {
       <div className="absolute inset-10 border-2 border-slate-300 rounded-lg"></div>
       
       <MapLabels />
+      <VerticalSeparators />
+      <LaneLabels />
       
       {/* Access Points Groups */}
       <AccessPointsGroup 
         position="top-left" 
-        points={barrierPoints} 
+        points={leftBarrierPoints} 
         onToggle={toggleAccessPoint} 
       />
       

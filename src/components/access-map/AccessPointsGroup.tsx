@@ -18,14 +18,14 @@ interface AccessPointsGroupProps {
 
 const AccessPointsGroup = ({ position, points, onToggle }: AccessPointsGroupProps) => {
   const positionClasses = {
-    "top-left": "absolute top-24 left-24",
-    "top-right": "absolute top-24 right-24",
-    "bottom-right": "absolute bottom-24 right-24",
-    "bottom-left": "absolute bottom-24 left-24",
+    "top-left": "absolute top-24 left-24 flex space-x-16",
+    "top-right": "absolute top-24 right-24 flex space-x-16",
+    "bottom-right": "absolute bottom-24 right-24 flex space-x-16",
+    "bottom-left": "absolute bottom-24 left-24 flex space-x-16",
   };
   
   return (
-    <div className={`${positionClasses[position]} flex space-x-8`}>
+    <div className={positionClasses[position]}>
       {points.map(point => (
         <button 
           key={point.id} 

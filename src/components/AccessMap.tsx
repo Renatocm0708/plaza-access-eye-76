@@ -6,7 +6,7 @@ const AccessMap = () => {
   return (
     <Card className="shadow-sm">
       <CardHeader>
-        <CardTitle>Mapa de Acceso</CardTitle>
+        <CardTitle>Mapa de Acceso en Tiempo Real</CardTitle>
       </CardHeader>
       <CardContent>
         <MapLayout />

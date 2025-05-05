@@ -1,5 +1,5 @@
 
-import { DoorClosed, DoorOpen, CircleCheck, CircleSlash } from "lucide-react";
+import { DoorClosed, DoorOpen } from "lucide-react";
 
 interface AccessPoint {
   id: string;
@@ -17,32 +17,35 @@ const AccessPointIcon = ({ point }: AccessPointIconProps) => {
   // Size determined by point type
   const size = point.type === "barrier" ? "h-12 w-12" : "h-10 w-10";
   
-  // Status color
-  const statusColor = point.online ? "text-green-500" : "text-red-500";
+  // Status indicator (small dot in the corner)
+  const StatusIndicator = () => (
+    <div className={`absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-white ${point.online ? 'bg-green-500' : 'bg-red-500'}`}></div>
+  );
   
   if (point.type === "barrier") {
-    // Use DoorOpen/DoorClosed for barriers too, but with a different style
+    // Use a different color for barriers
     return point.open ? (
       <div className="relative">
         <DoorOpen className={`${size} text-blue-500`} />
-        <CircleCheck className={`absolute -bottom-2 -right-2 h-5 w-5 ${statusColor}`} />
+        <StatusIndicator />
       </div>
     ) : (
       <div className="relative">
         <DoorClosed className={`${size} text-slate-700`} />
-        <CircleSlash className={`absolute -bottom-2 -right-2 h-5 w-5 ${statusColor}`} />
+        <StatusIndicator />
       </div>
     );
   } else {
+    // Doors
     return point.open ? (
       <div className="relative">
         <DoorOpen className={`${size} text-emerald-500`} />
-        <CircleCheck className={`absolute -bottom-2 -right-2 h-5 w-5 ${statusColor}`} />
+        <StatusIndicator />
       </div>
     ) : (
       <div className="relative">
         <DoorClosed className={`${size} text-slate-700`} />
-        <CircleSlash className={`absolute -bottom-2 -right-2 h-5 w-5 ${statusColor}`} />
+        <StatusIndicator />
       </div>
     );
   }

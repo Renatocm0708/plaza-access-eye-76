@@ -6,11 +6,11 @@ const MapLegend = () => {
     <div className="absolute bottom-4 left-4 bg-white p-2 rounded-md border border-slate-200 text-xs space-y-1">
       <div className="flex items-center space-x-2">
         <div className="flex items-center">
-          <CircleCheck className="h-4 w-4 text-green-500 mr-1" />
+          <div className="rounded-full h-3 w-3 bg-green-500 mr-1"></div>
           <span>Online</span>
         </div>
         <div className="flex items-center ml-2">
-          <CircleX className="h-4 w-4 text-red-500 mr-1" />
+          <div className="rounded-full h-3 w-3 bg-red-500 mr-1"></div>
           <span>Offline</span>
         </div>
       </div>
