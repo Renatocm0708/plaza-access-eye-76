@@ -433,21 +433,21 @@ const VisitAnalytics = () => {
                       size="sm"
                       onClick={() => setLaneFilter("propietarios")}
                     >
-                      Propietarios
+                      Carril 1 - Propietarios
                     </Button>
                     <Button
                       variant={laneFilter === "visitantesQR" ? "default" : "outline"}
                       size="sm"
                       onClick={() => setLaneFilter("visitantesQR")}
                     >
-                      Visitantes QR
+                      Carril 2 - Visitantes QR
                     </Button>
                     <Button
                       variant={laneFilter === "visitantes" ? "default" : "outline"}
                       size="sm"
                       onClick={() => setLaneFilter("visitantes")}
                     >
-                      Visitantes
+                      Carril 3 - Visitantes
                     </Button>
                   </>
                 ) : (
@@ -457,14 +457,14 @@ const VisitAnalytics = () => {
                       size="sm"
                       onClick={() => setLaneFilter("salidaPropietarios")}
                     >
-                      Propietarios
+                      Carril 4 - Propietarios
                     </Button>
                     <Button
                       variant={laneFilter === "salidaVisitantes" ? "default" : "outline"}
                       size="sm"
                       onClick={() => setLaneFilter("salidaVisitantes")}
                     >
-                      Visitantes
+                      Carril 5 - Visitantes
                     </Button>
                   </>
                 )}
