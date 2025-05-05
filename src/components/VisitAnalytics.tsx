@@ -1,5 +1,4 @@
-
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
@@ -48,27 +47,11 @@ const generateDailyData = (days = 7) => {
   }));
 };
 
-// Updated lane data with more descriptive structure and using CSS variables for colors
 const generateLaneData = () => {
   return [
-    { 
-      name: "Carril Propietarios", 
-      value: 540, 
-      colorVar: "var(--lane-owners)", 
-      id: "propietarios" 
-    },
-    { 
-      name: "Carril Visitantes QR", 
-      value: 320, 
-      colorVar: "var(--lane-visitors-qr)", 
-      id: "visitantesQR" 
-    },
-    { 
-      name: "Carril Visitantes", 
-      value: 210, 
-      colorVar: "var(--lane-visitors)", 
-      id: "visitantes" 
-    },
+    { name: "Carril Propietarios", value: 540, color: "#b5cb22", id: "propietarios" },
+    { name: "Carril Visitantes QR", value: 320, color: "#8ba313", id: "visitantesQR" },
+    { name: "Carril Visitantes", value: 210, color: "#626e0e", id: "visitantes" },
   ];
 };
 
@@ -92,7 +75,8 @@ const generateAddressVisits = () => {
   ];
 };
 
-// Date range picker component
+const COLORS = ["#b5cb22", "#8ba313", "#626e0e", "#3b3f48"];
+
 const DateRangePicker = ({ 
   date, 
   setDate 
@@ -151,11 +135,11 @@ const VisitAnalytics = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const isMobile = useIsMobile();
 
-  const hourlyData = useMemo(() => generateHourlyData(), []);
-  const dailyData = useMemo(() => generateDailyData(), []);
-  const allLaneData = useMemo(() => generateLaneData(), []);
+  const hourlyData = generateHourlyData();
+  const dailyData = generateDailyData();
+  const allLaneData = generateLaneData();
   
-  // Filter lane data based on selected filter - fixed to actually filter the data
+  // Filter lane data based on selected filter
   const laneData = useMemo(() => {
     if (laneFilter === "todas") {
       return allLaneData;
@@ -163,28 +147,16 @@ const VisitAnalytics = () => {
     return allLaneData.filter(item => item.id === laneFilter);
   }, [laneFilter, allLaneData]);
 
-  const frequentVisitors = useMemo(() => generateFrequentVisitors(), []);
-  const addressVisits = useMemo(() => generateAddressVisits(), []);
+  const frequentVisitors = generateFrequentVisitors();
+  const addressVisits = generateAddressVisits();
 
-  const filteredVisitors = useMemo(() => 
-    frequentVisitors.filter(visitor => 
-      visitor.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ),
-    [frequentVisitors, searchTerm]
+  const filteredVisitors = frequentVisitors.filter(visitor => 
+    visitor.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredAddresses = useMemo(() => 
-    addressVisits.filter(address => 
-      address.address.toLowerCase().includes(searchTerm.toLowerCase())
-    ),
-    [addressVisits, searchTerm]
+  const filteredAddresses = addressVisits.filter(address => 
+    address.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // Debug filter changes
-  useEffect(() => {
-    console.log("Lane filter changed to:", laneFilter);
-    console.log("Filtered data:", laneData);
-  }, [laneFilter, laneData]);
 
   return (
     <Card className="shadow-sm">
@@ -233,14 +205,14 @@ const VisitAnalytics = () => {
                             type="monotone" 
                             dataKey="pedestrian" 
                             name="Peatonal" 
-                            stroke="var(--chart-pedestrian)" 
+                            stroke="#b5cb22" 
                             strokeWidth={2} 
                           />
                           <Line 
                             type="monotone" 
                             dataKey="vehicular" 
                             name="Vehicular" 
-                            stroke="var(--chart-vehicular)" 
+                            stroke="#3b3f48" 
                             strokeWidth={2} 
                           />
                         </LineChart>
@@ -265,16 +237,14 @@ const VisitAnalytics = () => {
                             ]}
                             cx="50%"
                             cy="50%"
-                            labelLine={!isMobile}
-                            outerRadius={isMobile ? 80 : 100}
+                            labelLine={false}
+                            outerRadius={100}
                             fill="#8884d8"
                             dataKey="value"
-                            label={isMobile ? undefined : ({ name, percent }) => 
-                              `${name}: ${(percent * 100).toFixed(0)}%`
-                            }
+                            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                           >
-                            <Cell fill="var(--chart-vehicular)" />
-                            <Cell fill="var(--chart-pedestrian)" />
+                            <Cell fill="#3b3f48" />
+                            <Cell fill="#b5cb22" />
                           </Pie>
                           <Tooltip 
                             contentStyle={{ 
@@ -347,8 +317,8 @@ const VisitAnalytics = () => {
                           }}
                         />
                         <Legend />
-                        <Bar dataKey="pedestrian" name="Peatonal" fill="var(--chart-pedestrian)" />
-                        <Bar dataKey="vehicular" name="Vehicular" fill="var(--chart-vehicular)" />
+                        <Bar dataKey="pedestrian" name="Peatonal" fill="#b5cb22" />
+                        <Bar dataKey="vehicular" name="Vehicular" fill="#3b3f48" />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -357,13 +327,11 @@ const VisitAnalytics = () => {
             </TabsContent>
             
             <TabsContent value="lanes">
-              {/* Lane filter buttons - improved visually */}
               <div className="flex mb-4 flex-wrap gap-2">
                 <Button
                   variant={laneFilter === "todas" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setLaneFilter("todas")}
-                  className="min-w-20"
                 >
                   Todos
                 </Button>
@@ -371,7 +339,6 @@ const VisitAnalytics = () => {
                   variant={laneFilter === "propietarios" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setLaneFilter("propietarios")}
-                  className="min-w-20"
                 >
                   Propietarios
                 </Button>
@@ -379,7 +346,6 @@ const VisitAnalytics = () => {
                   variant={laneFilter === "visitantesQR" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setLaneFilter("visitantesQR")}
-                  className="min-w-20"
                 >
                   Visitantes QR
                 </Button>
@@ -387,76 +353,45 @@ const VisitAnalytics = () => {
                   variant={laneFilter === "visitantes" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setLaneFilter("visitantes")}
-                  className="min-w-20"
                 >
                   Visitantes
                 </Button>
               </div>
               
-              {/* Alternate between pie chart and bar chart based on data count */}
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium">Visitas por Carril</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {laneData.length > 1 ? (
-                    // For multiple lanes, show pie chart
-                    <div className="h-[400px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={laneData}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={!isMobile}
-                            outerRadius={isMobile ? 100 : 150}
-                            fill="#8884d8"
-                            dataKey="value"
-                            label={isMobile ? undefined : ({ name, value, percent }) => 
-                              `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
-                            }
-                          >
-                            {laneData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.colorVar} />
-                            ))}
-                          </Pie>
-                          <Tooltip 
-                            contentStyle={{ 
-                              backgroundColor: 'var(--card)', 
-                              borderColor: 'var(--border)',
-                              color: 'var(--foreground)'
-                            }}
-                          />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                  ) : (
-                    // For single lane, show bar chart
-                    <div className="h-[400px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart 
-                          data={laneData.map(lane => ({ name: lane.name, visits: lane.value }))}
-                          layout="vertical"
+                  <div className="h-[400px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={laneData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={!isMobile}
+                          outerRadius={isMobile ? 100 : 150}
+                          fill="#8884d8"
+                          dataKey="value"
+                          label={isMobile ? undefined : ({ name, value, percent }) => 
+                            `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
+                          }
                         >
-                          <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 120, 120, 0.2)" />
-                          <XAxis type="number" stroke="currentColor" />
-                          <YAxis dataKey="name" type="category" stroke="currentColor" width={150} />
-                          <Tooltip 
-                            contentStyle={{ 
-                              backgroundColor: 'var(--card)', 
-                              borderColor: 'var(--border)',
-                              color: 'var(--foreground)'
-                            }}
-                          />
-                          <Bar 
-                            dataKey="visits" 
-                            name="Visitas" 
-                            fill={laneData.length > 0 ? laneData[0].colorVar : "var(--chart-pedestrian)"} 
-                          />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  )}
+                          {laneData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'var(--card)', 
+                            borderColor: 'var(--border)',
+                            color: 'var(--foreground)'
+                          }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
