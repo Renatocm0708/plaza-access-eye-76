@@ -17,12 +17,12 @@ export const useAccessPoints = () => {
     { id: "b2", name: "Barrera 7", type: "barrier", online: true, open: true },
     
     // Doors
-    { id: "p1", name: "Barrera 1", type: "door", online: true, open: false },
-    { id: "p2", name: "Barrera 3", type: "door", online: true, open: false },
-    { id: "p3", name: "Barrera 5", type: "door", online: false, open: false },
-    { id: "p4", name: "Barrera 2", type: "door", online: true, open: true },
-    { id: "p5", name: "Barrera 4", type: "door", online: true, open: false },
-    { id: "p6", name: "Barrera 6", type: "door", online: true, open: false },
+    { id: "p1", name: "Barrera 2", type: "door", online: true, open: false },
+    { id: "p2", name: "Barrera 4", type: "door", online: true, open: false },
+    { id: "p3", name: "Barrera 6", type: "door", online: false, open: false },
+    { id: "p4", name: "Barrera 1", type: "door", online: true, open: true },
+    { id: "p5", name: "Barrera 3", type: "door", online: true, open: false },
+    { id: "p6", name: "Barrera 5", type: "door", online: true, open: false },
   ]);
 
   // Toggle access point status (for demonstration purposes)
