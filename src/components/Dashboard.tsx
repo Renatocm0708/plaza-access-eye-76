@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import SummaryStats from "./SummaryStats";
 import KeyIndicators from "./KeyIndicators";
@@ -6,7 +5,7 @@ import AccessMap from "./AccessMap";
 import AccessAlerts from "./AccessAlerts";
 import DeviceStatus from "./DeviceStatus";
 import VisitAnalytics from "./VisitAnalytics";
-import { Sun, Moon, FileExport } from "lucide-react";
+import { Sun, Moon, FileText } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -79,7 +78,7 @@ const Dashboard = () => {
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" className="flex items-center gap-2">
-                  <FileExport className="h-4 w-4" />
+                  <FileText className="h-4 w-4" />
                   <span className="hidden md:inline">Exportar Datos</span>
                 </Button>
               </PopoverTrigger>
@@ -116,6 +115,7 @@ const Dashboard = () => {
               <Moon className="h-4 w-4 text-slate-600 dark:text-slate-400" />
             </div>
           </div>
+          
           <div className="flex flex-wrap gap-2">
             <button
               className={`px-4 py-1 rounded-md text-sm font-medium ${
