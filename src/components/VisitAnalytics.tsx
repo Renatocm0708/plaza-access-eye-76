@@ -22,10 +22,10 @@ import {
   Pie, 
   Cell 
 } from "recharts";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { CalendarDays, Users, Car } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { DateRange } from "react-day-picker";
 
 // Data generation helper functions
 const generateHourlyData = () => {
@@ -47,12 +47,11 @@ const generateDailyData = (days = 7) => {
   }));
 };
 
-const generateEntranceData = () => {
+const generateLaneData = () => {
   return [
-    { name: "Entrada Norte", value: 540 },
-    { name: "Entrada Sur", value: 320 },
-    { name: "Entrada Este", value: 210 },
-    { name: "Entrada Oeste", value: 280 },
+    { name: "Carril Propietarios", value: 540, color: "#b5cb22" },
+    { name: "Carril Visitantes QR", value: 320, color: "#8ba313" },
+    { name: "Carril Visitantes", value: 210, color: "#626e0e" },
   ];
 };
 
@@ -76,14 +75,14 @@ const generateAddressVisits = () => {
   ];
 };
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#b5cb22", "#8ba313", "#626e0e", "#3b3f48"];
 
 const DateRangePicker = ({ 
   date, 
   setDate 
 }: { 
-  date: { from: Date | undefined; to: Date | undefined }; 
-  setDate: React.Dispatch<React.SetStateAction<{ from: Date | undefined; to: Date | undefined }>>
+  date: DateRange | undefined; 
+  setDate: (range: DateRange | undefined) => void
 }) => {
   return (
     <div className="flex items-center space-x-2 mb-4">
@@ -97,7 +96,7 @@ const DateRangePicker = ({
             )}
           >
             <CalendarDays className="mr-2 h-4 w-4" />
-            {date.from ? (
+            {date?.from ? (
               date.to ? (
                 <>
                   {format(date.from, "dd/MM/yyyy")} - {format(date.to, "dd/MM/yyyy")}
@@ -114,7 +113,7 @@ const DateRangePicker = ({
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={date.from}
+            defaultMonth={date?.from}
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
@@ -127,17 +126,17 @@ const DateRangePicker = ({
 };
 
 const VisitAnalytics = () => {
-  const [date, setDate] = useState<{ from: Date | undefined; to: Date | undefined }>({
+  const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(),
     to: undefined,
   });
   const [analysisView, setAnalysisView] = useState("overview");
-  const [entranceFilter, setEntranceFilter] = useState("todas");
+  const [laneFilter, setLaneFilter] = useState("todas");
   const [searchTerm, setSearchTerm] = useState("");
 
   const hourlyData = generateHourlyData();
   const dailyData = generateDailyData();
-  const entranceData = generateEntranceData();
+  const laneData = generateLaneData();
   const frequentVisitors = generateFrequentVisitors();
   const addressVisits = generateAddressVisits();
 
@@ -165,7 +164,7 @@ const VisitAnalytics = () => {
             <TabsList className="grid grid-cols-4 mb-4">
               <TabsTrigger value="overview">Resumen</TabsTrigger>
               <TabsTrigger value="hourly">Por Hora</TabsTrigger>
-              <TabsTrigger value="entrances">Por Garita</TabsTrigger>
+              <TabsTrigger value="lanes">Por Carril</TabsTrigger>
               <TabsTrigger value="tables">Visitantes</TabsTrigger>
             </TabsList>
             
@@ -189,14 +188,14 @@ const VisitAnalytics = () => {
                             type="monotone" 
                             dataKey="pedestrian" 
                             name="Peatonal" 
-                            stroke="#10b981" 
+                            stroke="#b5cb22" 
                             strokeWidth={2} 
                           />
                           <Line 
                             type="monotone" 
                             dataKey="vehicular" 
                             name="Vehicular" 
-                            stroke="#3b82f6" 
+                            stroke="#3b3f48" 
                             strokeWidth={2} 
                           />
                         </LineChart>
@@ -227,8 +226,8 @@ const VisitAnalytics = () => {
                             dataKey="value"
                             label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                           >
-                            <Cell fill="#3b82f6" />
-                            <Cell fill="#10b981" />
+                            <Cell fill="#3b3f48" />
+                            <Cell fill="#b5cb22" />
                           </Pie>
                           <Tooltip />
                         </PieChart>
@@ -289,8 +288,8 @@ const VisitAnalytics = () => {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="pedestrian" name="Peatonal" fill="#10b981" />
-                        <Bar dataKey="vehicular" name="Vehicular" fill="#3b82f6" />
+                        <Bar dataKey="pedestrian" name="Peatonal" fill="#b5cb22" />
+                        <Bar dataKey="vehicular" name="Vehicular" fill="#3b3f48" />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -298,57 +297,50 @@ const VisitAnalytics = () => {
               </Card>
             </TabsContent>
             
-            <TabsContent value="entrances">
+            <TabsContent value="lanes">
               <div className="flex mb-4">
                 <div className="flex space-x-2">
                   <Button
-                    variant={entranceFilter === "todas" ? "default" : "outline"}
+                    variant={laneFilter === "todas" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setEntranceFilter("todas")}
+                    onClick={() => setLaneFilter("todas")}
                   >
-                    Todas
+                    Todos
                   </Button>
                   <Button
-                    variant={entranceFilter === "norte" ? "default" : "outline"}
+                    variant={laneFilter === "propietarios" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setEntranceFilter("norte")}
+                    onClick={() => setLaneFilter("propietarios")}
                   >
-                    Norte
+                    Propietarios
                   </Button>
                   <Button
-                    variant={entranceFilter === "sur" ? "default" : "outline"}
+                    variant={laneFilter === "visitantesQR" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setEntranceFilter("sur")}
+                    onClick={() => setLaneFilter("visitantesQR")}
                   >
-                    Sur
+                    Visitantes QR
                   </Button>
                   <Button
-                    variant={entranceFilter === "este" ? "default" : "outline"}
+                    variant={laneFilter === "visitantes" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setEntranceFilter("este")}
+                    onClick={() => setLaneFilter("visitantes")}
                   >
-                    Este
-                  </Button>
-                  <Button
-                    variant={entranceFilter === "oeste" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setEntranceFilter("oeste")}
-                  >
-                    Oeste
+                    Visitantes
                   </Button>
                 </div>
               </div>
               
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">Visitas por Garita</CardTitle>
+                  <CardTitle className="text-sm font-medium">Visitas por Carril</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="h-[400px]">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
-                          data={entranceData}
+                          data={laneData}
                           cx="50%"
                           cy="50%"
                           labelLine={true}
@@ -359,8 +351,8 @@ const VisitAnalytics = () => {
                             `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
                           }
                         >
-                          {entranceData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          {laneData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
                         <Tooltip />
@@ -405,8 +397,8 @@ const VisitAnalytics = () => {
                                 <TableCell>
                                   <div className="flex items-center">
                                     {visitor.type === "Vehículo" ? 
-                                      <Car className="h-4 w-4 mr-1 text-blue-500" /> : 
-                                      <Users className="h-4 w-4 mr-1 text-green-500" />
+                                      <Car className="h-4 w-4 mr-1 text-gray-700 dark:text-gray-300" /> : 
+                                      <Users className="h-4 w-4 mr-1 text-lime-500 dark:text-lime-400" />
                                     }
                                     {visitor.type}
                                   </div>
