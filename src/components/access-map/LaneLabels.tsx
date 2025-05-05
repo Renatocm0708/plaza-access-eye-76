@@ -17,7 +17,7 @@ const LaneLabels = () => {
         <div className="absolute right-[260px] top-1/3 bg-slate-300 px-3 py-1 rounded text-xs font-medium w-20 text-center">
           Propietario
         </div>
-        <div className="absolute right-[200px] top-1/3 bg-slate-300 px-3 py-1 rounded text-xs font-medium w-28 text-center">
+        <div className="absolute right-[140px] top-1/3 bg-slate-300 px-3 py-1 rounded text-xs font-medium w-28 text-center">
           Propietario/Visita con QR
         </div>
         <div className="absolute right-[30px] top-1/3 bg-slate-300 px-3 py-1 rounded text-xs font-medium w-20 text-center">
