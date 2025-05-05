@@ -14,21 +14,17 @@ interface AccessPoint {
 const AccessMap = () => {
   // Mock data for access points
   const [accessPoints, setAccessPoints] = useState<AccessPoint[]>([
-    // Vehicular barriers (top left)
+    // Vehicular barriers
     { id: "b1", name: "Barrera 1", type: "barrier", online: true, open: false },
     { id: "b2", name: "Barrera 2", type: "barrier", online: true, open: true },
     
-    // Where Puerta 1 is located (x1) - first column
+    // Doors
     { id: "p1", name: "Puerta 1", type: "door", online: true, open: false },
     { id: "p2", name: "Puerta 2", type: "door", online: true, open: false },
     { id: "p3", name: "Puerta 3", type: "door", online: false, open: false },
-    
-    // Where Puerta 3 is located (x2) - second column
     { id: "p4", name: "Puerta 4", type: "door", online: true, open: true },
     { id: "p5", name: "Puerta 5", type: "door", online: true, open: false },
     { id: "p6", name: "Puerta 6", type: "door", online: true, open: false },
-    
-    
   ]);
 
   // Toggle access point status (for demonstration purposes)
@@ -97,14 +93,33 @@ const AccessMap = () => {
             Entrada Principal
           </div>
           
-          {/* Left label */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 bg-slate-300 px-4 py-0.5 rounded text-sm font-medium transform -rotate-90">
-            Acceso Vehicular
+          {/* Left label - Vertical labels on left side */}
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col items-center space-y-4">
+            <div className="bg-slate-300 px-2 py-0.5 rounded text-xs font-medium rotate-90 w-20 text-center mb-8">
+              Acceso Vehicular
+            </div>
+            <div className="bg-slate-300 px-2 py-0.5 rounded text-xs font-medium h-24 flex items-center transform -rotate-90 w-24 justify-center">
+              Propietario
+            </div>
+            <div className="bg-slate-300 px-2 py-0.5 rounded text-xs font-medium h-24 flex items-center transform -rotate-90 w-24 justify-center">
+              Visita
+            </div>
           </div>
           
-          {/* Right label - Changed to Acceso Vehicular */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-slate-300 px-4 py-0.5 rounded text-sm font-medium transform rotate-90">
-            Acceso Vehicular
+          {/* Right label - Vertical labels on right side */}
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col items-center space-y-4">
+            <div className="bg-slate-300 px-2 py-0.5 rounded text-xs font-medium rotate-90 w-20 text-center mb-8">
+              Acceso Vehicular
+            </div>
+            <div className="bg-slate-300 px-2 py-0.5 rounded text-xs font-medium h-24 flex items-center transform rotate-90 w-24 justify-center">
+              Propietario
+            </div>
+            <div className="bg-slate-300 px-2 py-0.5 rounded text-xs font-medium h-24 flex items-center transform rotate-90 w-24 justify-center">
+              Propietario / Visita con QR
+            </div>
+            <div className="bg-slate-300 px-2 py-0.5 rounded text-xs font-medium h-24 flex items-center transform rotate-90 w-24 justify-center">
+              Visita
+            </div>
           </div>
           
           {/* Top left - Barriers */}
@@ -161,24 +176,6 @@ const AccessMap = () => {
               ))}
           </div>
           
-          {/* Bottom left - Remaining doors */}
-          <div className="absolute bottom-24 left-24 flex space-x-8">
-            {accessPoints
-              .filter(p => ["p7", "p8", "p9"].includes(p.id))
-              .map(point => (
-                <button 
-                  key={point.id} 
-                  onClick={() => toggleAccessPoint(point.id, "open")}
-                  className="flex flex-col items-center group"
-                >
-                  <AccessPointIcon point={point} />
-                  <span className="mt-2 text-xs font-medium opacity-80 group-hover:opacity-100">
-                    {point.name}
-                  </span>
-                </button>
-              ))}
-          </div>
-          
           {/* Legend */}
           <div className="absolute bottom-4 left-4 bg-white p-2 rounded-md border border-slate-200 text-xs space-y-1">
             <div className="flex items-center space-x-2">
@@ -192,10 +189,14 @@ const AccessMap = () => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <DoorOpen className="h-4 w-4 text-emerald-500 mr-1" />
-              <span>Abierto</span>
-              <DoorClosed className="h-4 w-4 text-slate-700 ml-2 mr-1" />
-              <span>Cerrado</span>
+              <div className="flex items-center">
+                <DoorOpen className="h-4 w-4 text-emerald-500 mr-1" />
+                <span>Abierto</span>
+              </div>
+              <div className="flex items-center ml-2">
+                <DoorClosed className="h-4 w-4 text-slate-700 mr-1" />
+                <span>Cerrado</span>
+              </div>
             </div>
           </div>
         </div>

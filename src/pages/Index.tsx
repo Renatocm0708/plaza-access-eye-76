@@ -1,5 +1,5 @@
 
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import Dashboard from "../components/Dashboard";
 import Navbar from "../components/Navbar";
 import VehicleCounter from "../components/VehicleCounter";

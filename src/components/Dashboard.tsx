@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import SummaryStats from "./SummaryStats";
 import KeyIndicators from "./KeyIndicators";
@@ -14,6 +15,7 @@ import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import * as XLSX from 'xlsx';
 
 const Dashboard = () => {
   const [timeRange, setTimeRange] = useState("day");
@@ -47,19 +49,15 @@ const Dashboard = () => {
       [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Residente", "Ana Rodríguez", "Bloque C, Apto 310", "Peatonal", "Tag", "Salida"],
     ];
     
-    // Convertir a CSV
-    const csv = data.map(row => row.join(",")).join("\n");
+    // Crear libro de Excel y hoja
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(data);
     
-    // Crear blob y descargar
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", `registros_acceso_${format(dateRange.from, "yyyy-MM-dd")}_${format(dateRange.to, "yyyy-MM-dd")}.csv`);
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Añadir la hoja al libro
+    XLSX.utils.book_append_sheet(wb, ws, "Registros de Acceso");
+    
+    // Generar el archivo de Excel y descargarlo
+    XLSX.writeFile(wb, `registros_acceso_${format(dateRange.from, "yyyy-MM-dd")}_${format(dateRange.to, "yyyy-MM-dd")}.xlsx`);
   };
   
   return (
@@ -99,7 +97,7 @@ const Dashboard = () => {
                       onClick={handleExportData}
                       className="bg-lime-500 hover:bg-lime-600"
                     >
-                      Exportar CSV
+                      Exportar Excel
                     </Button>
                   </div>
                 </div>
