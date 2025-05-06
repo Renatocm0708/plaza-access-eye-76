@@ -1,5 +1,5 @@
 
-import { CircleCheck, CircleX, DoorOpen, DoorClosed } from "lucide-react";
+import { DoorOpen, DoorClosed } from "lucide-react";
 
 const MapLegend = () => {
   return (

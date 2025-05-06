@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,17 +21,16 @@ import {
   Pie, 
   Cell 
 } from "recharts";
-import { CalendarDays, Users, Car, Fingerprint, QrCode, Tag, UserCircle } from "lucide-react";
+import { CalendarDays, Users, Car, QrCode, Tag, UserCircle } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-// Data generation helper functions
+// Data generation helper functions - removed pedestrian references
 const generateHourlyData = () => {
   return Array.from({ length: 24 }, (_, i) => ({
     hour: `${i}:00`,
-    pedestrian: Math.floor(Math.random() * 50) + 5,
     vehicular: Math.floor(Math.random() * 30) + 5,
     entrada: Math.floor(Math.random() * 50) + 5,
     salida: Math.floor(Math.random() * 40) + 5,
@@ -44,7 +42,6 @@ const generateDailyData = (days = 7) => {
   const dayNames = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
   return Array.from({ length: days }, (_, i) => ({
     day: dayNames[i % 7],
-    pedestrian: Math.floor(Math.random() * 200) + 50,
     vehicular: Math.floor(Math.random() * 150) + 30,
     entrada: Math.floor(Math.random() * 180) + 40,
     salida: Math.floor(Math.random() * 150) + 40,
@@ -93,38 +90,34 @@ const generateExitLaneData = () => {
 };
 
 const generateFrequentVisitors = () => {
-  const entryMethods = ["Facial", "QR", "Tag", "Personal"];
+  const entryMethods = ["QR", "Tag"];
   return [
-    { id: 1, name: "Juan Pérez", visits: 23, lastVisit: "2025-05-04", type: "Vehículo", method: entryMethods[1] },
-    { id: 2, name: "Ana López", visits: 19, lastVisit: "2025-05-05", type: "Peatonal", method: entryMethods[0] },
-    { id: 3, name: "Carlos Ruiz", visits: 15, lastVisit: "2025-05-03", type: "Vehículo", method: entryMethods[2] },
-    { id: 4, name: "María González", visits: 12, lastVisit: "2025-05-02", type: "Peatonal", method: entryMethods[3] },
-    { id: 5, name: "Roberto Díaz", visits: 10, lastVisit: "2025-05-01", type: "Vehículo", method: entryMethods[1] },
+    { id: 1, name: "Juan Pérez", visits: 23, lastVisit: "2025-05-04", type: "Vehículo", method: entryMethods[0] },
+    { id: 2, name: "Ana López", visits: 19, lastVisit: "2025-05-05", type: "Vehículo", method: entryMethods[1] },
+    { id: 3, name: "Carlos Ruiz", visits: 15, lastVisit: "2025-05-03", type: "Vehículo", method: entryMethods[0] },
+    { id: 4, name: "María González", visits: 12, lastVisit: "2025-05-02", type: "Vehículo", method: entryMethods[1] },
+    { id: 5, name: "Roberto Díaz", visits: 10, lastVisit: "2025-05-01", type: "Vehículo", method: entryMethods[0] },
   ];
 };
 
 const generateAddressVisits = () => {
-  const entryMethods = ["Facial", "QR", "Tag", "Personal"];
+  const entryMethods = ["QR", "Tag"];
   return [
-    { id: 1, address: "Bloque A, Apto 101", visits: 45, residents: 3, lastVisit: "2025-05-05", method: entryMethods[1] },
-    { id: 2, address: "Bloque B, Apto 205", visits: 38, residents: 2, lastVisit: "2025-05-04", method: entryMethods[0] },
-    { id: 3, address: "Bloque C, Apto 310", visits: 29, residents: 4, lastVisit: "2025-05-05", method: entryMethods[2] },
-    { id: 4, address: "Bloque D, Apto 402", visits: 23, residents: 2, lastVisit: "2025-05-03", method: entryMethods[3] },
-    { id: 5, address: "Bloque A, Apto 206", visits: 19, residents: 1, lastVisit: "2025-05-02", method: entryMethods[1] },
+    { id: 1, address: "Bloque A, Apto 101", visits: 45, residents: 3, lastVisit: "2025-05-05", method: entryMethods[0] },
+    { id: 2, address: "Bloque B, Apto 205", visits: 38, residents: 2, lastVisit: "2025-05-04", method: entryMethods[1] },
+    { id: 3, address: "Bloque C, Apto 310", visits: 29, residents: 4, lastVisit: "2025-05-05", method: entryMethods[0] },
+    { id: 4, address: "Bloque D, Apto 402", visits: 23, residents: 2, lastVisit: "2025-05-03", method: entryMethods[1] },
+    { id: 5, address: "Bloque A, Apto 206", visits: 19, residents: 1, lastVisit: "2025-05-02", method: entryMethods[0] },
   ];
 };
 
-// Componente para mostrar el ícono según el método de entrada
+// Component to show icon based on entry method
 const EntryMethodIcon = ({ method }: { method: string }) => {
   switch (method) {
-    case "Facial":
-      return <Fingerprint className="h-4 w-4 text-blue-500" />;
     case "QR":
       return <QrCode className="h-4 w-4 text-green-500" />;
     case "Tag":
       return <Tag className="h-4 w-4 text-orange-500" />;
-    case "Personal":
-      return <UserCircle className="h-4 w-4 text-purple-500" />;
     default:
       return null;
   }
@@ -233,8 +226,8 @@ const VisitAnalytics = () => {
     <Card className="shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Users className="h-5 w-5 text-primary dark:text-primary" />
-          Análisis de Visitas
+          <Car className="h-5 w-5 text-primary dark:text-primary" />
+          Análisis de Visitas Vehiculares
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -292,10 +285,10 @@ const VisitAnalytics = () => {
                   </CardContent>
                 </Card>
                 
-                {/* Access Type Comparison */}
+                {/* Vehicle Type Comparison */}
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium">Tipos de Acceso</CardTitle>
+                    <CardTitle className="text-sm font-medium">Tipos de Vehículos</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="h-[300px] flex items-center justify-center">
@@ -303,8 +296,9 @@ const VisitAnalytics = () => {
                         <PieChart>
                           <Pie
                             data={[
-                              { name: "Con Vehículo", value: 450 },
-                              { name: "Sin Vehículo", value: 650 }
+                              { name: "Vehículos particulares", value: 650 },
+                              { name: "Vehículos de servicio", value: 250 },
+                              { name: "Vehículos visitantes", value: 350 }
                             ]}
                             cx="50%"
                             cy="50%"
@@ -316,8 +310,9 @@ const VisitAnalytics = () => {
                               `${name}: ${(percent * 100).toFixed(0)}%`
                             }
                           >
-                            <Cell fill="#3b3f48" />
                             <Cell fill="#b5cb22" />
+                            <Cell fill="#8ba313" />
+                            <Cell fill="#626e0e" />
                           </Pie>
                           <Tooltip 
                             contentStyle={{ 
@@ -399,7 +394,9 @@ const VisitAnalytics = () => {
               </Card>
             </TabsContent>
             
+            {/* Keep existing lanes tab, but it's already vehicle-focused */}
             <TabsContent value="lanes">
+              {/* ... keep existing code (lane filtering and visualization) */}
               <div className="flex mb-4 flex-wrap gap-2">
                 <Button
                   variant={directionFilter === "entrada" ? "default" : "outline"}
@@ -561,7 +558,7 @@ const VisitAnalytics = () => {
                           <TableHeader>
                             <TableRow>
                               <TableHead>Visitante</TableHead>
-                              <TableHead className="hidden md:table-cell">Tipo</TableHead>
+                              <TableHead className="hidden md:table-cell">Vehículo</TableHead>
                               <TableHead className="hidden md:table-cell">Método</TableHead>
                               <TableHead className="text-right">Visitas</TableHead>
                               <TableHead className="text-right">Última Visita</TableHead>
@@ -573,20 +570,14 @@ const VisitAnalytics = () => {
                                 <TableCell className="font-medium">
                                   <div className="flex items-center">
                                     <span className="md:hidden mr-2">
-                                      {visitor.type === "Vehículo" ? 
-                                        <Car className="h-4 w-4 text-gray-700 dark:text-gray-300" /> : 
-                                        <Users className="h-4 w-4 text-lime-500 dark:text-lime-400" />
-                                      }
+                                      <Car className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                                     </span>
                                     {visitor.name}
                                   </div>
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                   <div className="flex items-center">
-                                    {visitor.type === "Vehículo" ? 
-                                      <Car className="h-4 w-4 mr-1 text-gray-700 dark:text-gray-300" /> : 
-                                      <Users className="h-4 w-4 mr-1 text-lime-500 dark:text-lime-400" />
-                                    }
+                                    <Car className="h-4 w-4 mr-1 text-gray-700 dark:text-gray-300" />
                                     {visitor.type}
                                   </div>
                                 </TableCell>

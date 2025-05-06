@@ -11,8 +11,8 @@ const MapLayout = () => {
   
   // Group access points by position
   const leftBarrierPoints = getPointsByIds(["b1", "b2"]);
-  const topRightPoints = getPointsByIds(["p1", "p2", "p3"]);
-  const bottomRightPoints = getPointsByIds(["p4", "p5", "p6"]);
+  const topRightPoints = getPointsByIds(["b3", "b4", "b5"]);
+  const bottomRightPoints = getPointsByIds(["b6", "b7", "b8"]);
   
   return (
     <div className="relative bg-slate-100 rounded-lg p-6 h-[500px]">

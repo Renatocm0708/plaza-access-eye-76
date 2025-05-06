@@ -19,32 +19,29 @@ interface KeyIndicatorsProps {
   timeRange: string;
 }
 
-// Mock data for graphs
+// Mock data for graphs - removed pedestrian data
 const generateTimeData = (timeRange: string) => {
   if (timeRange === "day") {
     return Array.from({ length: 24 }, (_, i) => ({
       time: `${i}:00`,
-      pedestrian: Math.floor(Math.random() * 100) + 10,
       vehicular: Math.floor(Math.random() * 50) + 5,
-      entries: Math.floor(Math.random() * 80) + 15,
-      exits: Math.floor(Math.random() * 70) + 10,
+      entries: Math.floor(Math.random() * 30) + 5,
+      exits: Math.floor(Math.random() * 25) + 5,
     }));
   } else if (timeRange === "week") {
     const days = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
     return days.map(day => ({
       time: day,
-      pedestrian: Math.floor(Math.random() * 700) + 300,
       vehicular: Math.floor(Math.random() * 350) + 150,
-      entries: Math.floor(Math.random() * 500) + 250,
-      exits: Math.floor(Math.random() * 450) + 200,
+      entries: Math.floor(Math.random() * 200) + 100,
+      exits: Math.floor(Math.random() * 180) + 80,
     }));
   } else {
     return Array.from({ length: 30 }, (_, i) => ({
       time: `${i+1}`,
-      pedestrian: Math.floor(Math.random() * 1200) + 500,
       vehicular: Math.floor(Math.random() * 800) + 300,
-      entries: Math.floor(Math.random() * 1000) + 400,
-      exits: Math.floor(Math.random() * 900) + 350,
+      entries: Math.floor(Math.random() * 450) + 200,
+      exits: Math.floor(Math.random() * 420) + 180,
     }));
   }
 };
@@ -55,7 +52,7 @@ const KeyIndicators = ({ timeRange }: KeyIndicatorsProps) => {
 
   // Find peak hours based on total traffic
   const peakHours = [...data].sort((a, b) => 
-    (b.pedestrian + b.vehicular) - (a.pedestrian + a.vehicular)
+    b.vehicular - a.vehicular
   ).slice(0, 3);
 
   return (
@@ -92,7 +89,7 @@ const KeyIndicators = ({ timeRange }: KeyIndicatorsProps) => {
                     <p className="text-xs text-slate-500">Horario {index + 1}</p>
                     <p className="text-md font-medium">{hour.time}</p>
                     <p className="text-xs text-slate-500 mt-1">
-                      {hour.pedestrian + hour.vehicular} accesos
+                      {hour.vehicular} vehículos
                     </p>
                   </div>
                 ))}
@@ -109,7 +106,6 @@ const KeyIndicators = ({ timeRange }: KeyIndicatorsProps) => {
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="pedestrian" fill="#10b981" name="Peatonal" />
                   <Bar dataKey="vehicular" fill="#3b82f6" name="Vehicular" />
                 </BarChart>
               </ResponsiveContainer>

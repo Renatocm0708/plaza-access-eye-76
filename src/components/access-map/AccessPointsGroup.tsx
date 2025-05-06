@@ -4,7 +4,7 @@ import AccessPointIcon from "./AccessPointIcon";
 interface AccessPoint {
   id: string;
   name: string;
-  type: "barrier" | "door";
+  type: "barrier";
   online: boolean;
   open: boolean;
 }

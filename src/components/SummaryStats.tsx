@@ -1,40 +1,37 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowUpRight, Users, Car } from "lucide-react";
+import { ArrowUpRight, Car } from "lucide-react";
 
 interface SummaryStatsProps {
   timeRange: string;
 }
 
 const SummaryStats = ({ timeRange }: SummaryStatsProps) => {
-  // Mock data for demonstration
+  // Mock data for demonstration - removed pedestrian data
   const stats = {
     day: {
-      total: 1264,
+      total: 487,
       vehicular: 487,
-      pedestrian: 777,
-      firstWay: 510,
-      secondWay: 425,
-      thirdWay: 329,
-      qr: 256
+      firstWay: 210,
+      secondWay: 175,
+      thirdWay: 102,
+      qr: 156
     },
     week: {
-      total: 8752,
+      total: 3215,
       vehicular: 3215,
-      pedestrian: 5537,
-      firstWay: 3512,
-      secondWay: 2895,
-      thirdWay: 2345,
-      qr: 1842
+      firstWay: 1512,
+      secondWay: 1095,
+      thirdWay: 608,
+      qr: 842
     },
     month: {
-      total: 38624,
+      total: 15248,
       vehicular: 15248,
-      pedestrian: 23376,
-      firstWay: 15450,
-      secondWay: 12834,
-      thirdWay: 10340,
-      qr: 7625
+      firstWay: 6450,
+      secondWay: 5834,
+      thirdWay: 2964,
+      qr: 3625
     }
   };
 
@@ -44,7 +41,7 @@ const SummaryStats = ({ timeRange }: SummaryStatsProps) => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <Card className="shadow-sm">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-slate-500">Ingresos totales</CardTitle>
+          <CardTitle className="text-sm font-medium text-slate-500">Ingresos vehiculares</CardTitle>
           <ArrowUpRight className="h-4 w-4 text-blue-500" />
         </CardHeader>
         <CardContent>
@@ -65,11 +62,7 @@ const SummaryStats = ({ timeRange }: SummaryStatsProps) => {
           <div className="flex space-x-4 mt-1">
             <div className="flex items-center">
               <div className="w-2 h-2 rounded-full bg-blue-500 mr-1"></div>
-              <span className="text-xs">{Math.round(currentStats.qr * 0.4).toLocaleString()} Vehicular</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 mr-1"></div>
-              <span className="text-xs">{Math.round(currentStats.qr * 0.6).toLocaleString()} Peatonal</span>
+              <span className="text-xs">{Math.round(currentStats.qr).toLocaleString()} Vehicular</span>
             </div>
           </div>
         </CardContent>
