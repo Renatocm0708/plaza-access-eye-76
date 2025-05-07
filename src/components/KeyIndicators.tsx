@@ -19,12 +19,13 @@ interface KeyIndicatorsProps {
   timeRange: string;
 }
 
-// Mock data for graphs - removed pedestrian data
+// Mock data for graphs - includes pedestrian data
 const generateTimeData = (timeRange: string) => {
   if (timeRange === "day") {
     return Array.from({ length: 24 }, (_, i) => ({
       time: `${i}:00`,
       vehicular: Math.floor(Math.random() * 50) + 5,
+      pedestrian: Math.floor(Math.random() * 40) + 5,
       entries: Math.floor(Math.random() * 30) + 5,
       exits: Math.floor(Math.random() * 25) + 5,
     }));
@@ -33,6 +34,7 @@ const generateTimeData = (timeRange: string) => {
     return days.map(day => ({
       time: day,
       vehicular: Math.floor(Math.random() * 350) + 150,
+      pedestrian: Math.floor(Math.random() * 250) + 120,
       entries: Math.floor(Math.random() * 200) + 100,
       exits: Math.floor(Math.random() * 180) + 80,
     }));
@@ -40,6 +42,7 @@ const generateTimeData = (timeRange: string) => {
     return Array.from({ length: 30 }, (_, i) => ({
       time: `${i+1}`,
       vehicular: Math.floor(Math.random() * 800) + 300,
+      pedestrian: Math.floor(Math.random() * 600) + 250,
       entries: Math.floor(Math.random() * 450) + 200,
       exits: Math.floor(Math.random() * 420) + 180,
     }));
@@ -52,7 +55,7 @@ const KeyIndicators = ({ timeRange }: KeyIndicatorsProps) => {
 
   // Find peak hours based on total traffic
   const peakHours = [...data].sort((a, b) => 
-    b.vehicular - a.vehicular
+    (b.vehicular + b.pedestrian) - (a.vehicular + a.pedestrian)
   ).slice(0, 3);
 
   return (
@@ -89,7 +92,7 @@ const KeyIndicators = ({ timeRange }: KeyIndicatorsProps) => {
                     <p className="text-xs text-slate-500">Horario {index + 1}</p>
                     <p className="text-md font-medium">{hour.time}</p>
                     <p className="text-xs text-slate-500 mt-1">
-                      {hour.vehicular} vehículos
+                      {hour.vehicular} vehículos | {hour.pedestrian} peatones
                     </p>
                   </div>
                 ))}
@@ -107,6 +110,7 @@ const KeyIndicators = ({ timeRange }: KeyIndicatorsProps) => {
                   <Tooltip />
                   <Legend />
                   <Bar dataKey="vehicular" fill="#3b82f6" name="Vehicular" />
+                  <Bar dataKey="pedestrian" fill="#10b981" name="Peatonal" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

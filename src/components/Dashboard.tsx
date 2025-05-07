@@ -6,6 +6,7 @@ import AccessMap from "./AccessMap";
 import AccessAlerts from "./AccessAlerts";
 import DeviceStatus from "./DeviceStatus";
 import VisitAnalytics from "./VisitAnalytics";
+import PedestrianAnalytics from "./PedestrianAnalytics";
 import { Sun, Moon, FileText } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/context/AuthContext";
@@ -162,6 +163,11 @@ const Dashboard = () => {
       {/* Visit Analytics - Improved for mobile */}
       <div className="mt-6">
         <VisitAnalytics />
+      </div>
+      
+      {/* Pedestrian Analytics - New component */}
+      <div className="mt-6">
+        <PedestrianAnalytics />
       </div>
       
       {/* Access Map - Improved for mobile */}
