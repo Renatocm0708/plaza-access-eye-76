@@ -83,21 +83,21 @@ const alerts: AlertItem[] = [
   {
     id: "1",
     type: "unauthorized",
-    device: "Torniquete Entrada Principal",
+    device: "Barrera Vehicular 1",
     time: "Hace 5 minutos",
     message: "Intento de acceso no autorizado"
   },
   {
     id: "2",
     type: "failure",
-    device: "Barrera Vehicular Este",
+    device: "Barrera Vehicular 2",
     time: "Hace 35 minutos",
     message: "Fallo en sensor de posición"
   },
   {
     id: "3",
     type: "unauthorized",
-    device: "Torniquete Acceso Sur 2",
+    device: "Barrera Vehicular 3",
     time: "Hace 1 hora",
     message: "Credencial caducada"
   }
