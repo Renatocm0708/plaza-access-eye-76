@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import SummaryStats from "./SummaryStats";
 import KeyIndicators from "./KeyIndicators";
@@ -6,7 +5,6 @@ import AccessMap from "./AccessMap";
 import AccessAlerts from "./AccessAlerts";
 import DeviceStatus from "./DeviceStatus";
 import VisitAnalytics from "./VisitAnalytics";
-import PedestrianAnalytics from "./PedestrianAnalytics";
 import { Sun, Moon, FileText } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/context/AuthContext";
@@ -41,13 +39,13 @@ const Dashboard = () => {
       return;
     }
     
-    // Generar datos de ejemplo para exportar
+    // Generar datos de ejemplo para exportar - solo vehiculares
     const data = [
       ["Fecha", "Tipo", "Nombre", "Dirección", "Tipo Acceso", "Método", "Entrada/Salida"],
       [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Visitante", "Juan Pérez", "Bloque A, Apto 101", "Vehicular", "QR", "Entrada"],
-      [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Residente", "María Gómez", "Bloque B, Apto 205", "Peatonal", "Facial", "Entrada"],
+      [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Residente", "María Gómez", "Bloque B, Apto 205", "Vehicular", "Tag", "Entrada"],
       [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Visitante", "Carlos López", "Bloque A, Apto 101", "Vehicular", "Personal", "Salida"],
-      [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Residente", "Ana Rodríguez", "Bloque C, Apto 310", "Peatonal", "Tag", "Salida"],
+      [format(new Date(), "yyyy-MM-dd HH:mm:ss"), "Residente", "Ana Rodríguez", "Bloque C, Apto 310", "Vehicular", "Tag", "Salida"],
     ];
     
     // Crear libro de Excel y hoja
@@ -163,11 +161,6 @@ const Dashboard = () => {
       {/* Visit Analytics - Improved for mobile */}
       <div className="mt-6">
         <VisitAnalytics />
-      </div>
-      
-      {/* Pedestrian Analytics - New component */}
-      <div className="mt-6">
-        <PedestrianAnalytics />
       </div>
       
       {/* Access Map - Improved for mobile */}

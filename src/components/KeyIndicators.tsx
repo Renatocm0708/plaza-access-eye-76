@@ -19,13 +19,12 @@ interface KeyIndicatorsProps {
   timeRange: string;
 }
 
-// Mock data for graphs - includes pedestrian data
+// Mock data for graphs - solo vehicular
 const generateTimeData = (timeRange: string) => {
   if (timeRange === "day") {
     return Array.from({ length: 24 }, (_, i) => ({
       time: `${i}:00`,
       vehicular: Math.floor(Math.random() * 50) + 5,
-      pedestrian: Math.floor(Math.random() * 40) + 5,
       entries: Math.floor(Math.random() * 30) + 5,
       exits: Math.floor(Math.random() * 25) + 5,
     }));
@@ -34,7 +33,6 @@ const generateTimeData = (timeRange: string) => {
     return days.map(day => ({
       time: day,
       vehicular: Math.floor(Math.random() * 350) + 150,
-      pedestrian: Math.floor(Math.random() * 250) + 120,
       entries: Math.floor(Math.random() * 200) + 100,
       exits: Math.floor(Math.random() * 180) + 80,
     }));
@@ -42,7 +40,6 @@ const generateTimeData = (timeRange: string) => {
     return Array.from({ length: 30 }, (_, i) => ({
       time: `${i+1}`,
       vehicular: Math.floor(Math.random() * 800) + 300,
-      pedestrian: Math.floor(Math.random() * 600) + 250,
       entries: Math.floor(Math.random() * 450) + 200,
       exits: Math.floor(Math.random() * 420) + 180,
     }));
@@ -53,15 +50,15 @@ const KeyIndicators = ({ timeRange }: KeyIndicatorsProps) => {
   const [activeTab, setActiveTab] = useState("traffic");
   const data = generateTimeData(timeRange);
 
-  // Find peak hours based on total traffic
+  // Find peak hours based on vehicular traffic only
   const peakHours = [...data].sort((a, b) => 
-    (b.vehicular + b.pedestrian) - (a.vehicular + a.pedestrian)
+    b.vehicular - a.vehicular
   ).slice(0, 3);
 
   return (
     <Card className="shadow-sm">
       <CardHeader>
-        <CardTitle>Indicadores de Acceso</CardTitle>
+        <CardTitle>Indicadores de Acceso Vehicular</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -85,14 +82,14 @@ const KeyIndicators = ({ timeRange }: KeyIndicatorsProps) => {
             </div>
             
             <div className="bg-slate-50 p-4 rounded-lg">
-              <h3 className="text-sm font-medium text-slate-700 mb-3">Horarios pico</h3>
+              <h3 className="text-sm font-medium text-slate-700 mb-3">Horarios pico vehiculares</h3>
               <div className="grid grid-cols-3 gap-4">
                 {peakHours.map((hour, index) => (
                   <div key={index} className="bg-white p-3 rounded-md border border-slate-100 shadow-sm">
                     <p className="text-xs text-slate-500">Horario {index + 1}</p>
                     <p className="text-md font-medium">{hour.time}</p>
                     <p className="text-xs text-slate-500 mt-1">
-                      {hour.vehicular} vehículos | {hour.pedestrian} peatones
+                      {hour.vehicular} vehículos
                     </p>
                   </div>
                 ))}
@@ -109,8 +106,7 @@ const KeyIndicators = ({ timeRange }: KeyIndicatorsProps) => {
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="vehicular" fill="#3b82f6" name="Vehicular" />
-                  <Bar dataKey="pedestrian" fill="#10b981" name="Peatonal" />
+                  <Bar dataKey="vehicular" fill="#3b82f6" name="Acceso Vehicular" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

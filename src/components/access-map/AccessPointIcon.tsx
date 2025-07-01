@@ -14,7 +14,7 @@ interface AccessPointIconProps {
 }
 
 const AccessPointIcon = ({ point }: AccessPointIconProps) => {
-  // Size for barrier access points
+  // Size for barrier access points only
   const size = "h-12 w-12";
   
   // Status indicator (small dot in the corner)

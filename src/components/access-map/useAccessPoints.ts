@@ -10,9 +10,9 @@ export interface AccessPoint {
 }
 
 export const useAccessPoints = () => {
-  // Mock data for access points - only vehicle barriers
+  // Mock data for access points - solo barreras vehiculares
   const [accessPoints, setAccessPoints] = useState<AccessPoint[]>([
-    // Vehicular barriers
+    // Vehicular barriers only
     { id: "b1", name: "Barrera 8", type: "barrier", online: true, open: false },
     { id: "b2", name: "Barrera 7", type: "barrier", online: true, open: true },
     { id: "b3", name: "Barrera 2", type: "barrier", online: true, open: false },
